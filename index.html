@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字营销智能体 · 人格感知实验</title>
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{
+            --green-50:#f1f8f4;--green-100:#dceee2;--green-200:#b7ddc2;--green-400:#5fb878;--green-500:#43a55c;--green-600:#338a48;--green-700:#2b6e3b;--green-800:#1e4829;
+            --purple-50:#f5f0ff;--purple-400:#9b59b6;--purple-500:#8e44ad;
+            --blue-50:#eaf2f8;--blue-400:#5dade2;--blue-500:#2980b9;
+            --orange-50:#fef5e7;--orange-400:#f0b27a;--orange-500:#e67e22;
+            --white:#fff;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+            --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;
+            --radius:18px;--radius-sm:12px;
+            --shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.07);
+            --shadow-lg:0 10px 25px -5px rgba(0,0,0,0.08);--shadow-xl:0 20px 40px -10px rgba(0,0,0,0.1);
+        }
+        html{font-size:16px;scroll-behavior:smooth}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+            background:linear-gradient(170deg,#f5faf7 0%,#f0f2f5 30%,#faf8fc 60%,#fafdfb 100%);
+            background-attachment:fixed;color:var(--gray-800);min-height:100vh;line-height:1.6;
+            -webkit-font-smoothing:antialiased;
+        }
+        .leaves{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+        .leaf{position:absolute;opacity:0.04;animation:floatLeaf 20s infinite ease-in-out}
+        .leaf:nth-child(1){top:8%;left:4%;font-size:2.6rem}
+        .leaf:nth-child(2){top:22%;left:88%;font-size:3rem;animation-delay:-5s}
+        .leaf:nth-child(3){top:58%;left:8%;font-size:2rem;animation-delay:-10s}
+        .leaf:nth-child(4){top:78%;left:78%;font-size:2.8rem;animation-delay:-15s}
+        @keyframes floatLeaf{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-18px) rotate(5deg) scale(1.05)}}
+        .page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px}
+        .container{width:100%;max-width:940px;display:flex;flex-direction:column;gap:22px}
+        .header{text-align:center;padding:24px 16px 4px}
+        .header-icon{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;font-size:1.8rem;margin-bottom:12px;background:linear-gradient(135deg,var(--purple-400),var(--green-400));border-radius:18px;box-shadow:0 8px 24px rgba(142,68,173,0.22);animation:iconPulse 3s ease-in-out infinite}
+        @keyframes iconPulse{0%,100%{box-shadow:0 8px 24px rgba(142,68,173,0.22)}50%{box-shadow:0 8px 38px rgba(142,68,173,0.38)}}
+        .header h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--purple-500),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+        .header .subtitle{font-size:0.9rem;color:var(--gray-600);max-width:520px;margin:0 auto;line-height:1.7}
+        .flow-card{background:var(--white);border-radius:var(--radius);padding:20px 28px;box-shadow:var(--shadow-md);border:1px solid var(--green-100)}
+        .flow-card h3{font-size:1rem;font-weight:700;color:var(--purple-500);margin-bottom:14px}
+        .flow-steps{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.82rem}
+        .flow-step{background:linear-gradient(135deg,var(--purple-50),var(--green-50));padding:8px 14px;border-radius:8px;color:var(--gray-700);font-weight:500;border:1px solid var(--green-100)}
+        .flow-arrow{color:var(--purple-400);font-weight:700;font-size:1.1rem}
+        .tab-nav{display:flex;gap:6px;padding:6px;background:var(--white);border-radius:var(--radius-sm);box-shadow:var(--shadow-md);border:1px solid var(--green-100);overflow-x:auto}
+        .tab-btn{flex:1;min-width:90px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;position:relative;border:none;background:transparent;border-radius:10px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--gray-500);white-space:nowrap;transition:all 0.25s ease;font-family:inherit}
+        .tab-btn:hover{color:var(--purple-500);background:var(--purple-50)}
+        .tab-btn.active{color:var(--purple-500);background:var(--purple-50);font-weight:700}
+        .tab-btn .tab-emoji{font-size:1.3rem}
+        .tab-btn .tab-label{font-size:0.85rem}
+        .tab-btn.active::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:20px;height:3px;background:var(--purple-400);border-radius:3px}
+        .chat-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-xl);overflow:hidden;border:1px solid var(--green-100)}
+        .chat-card-header{background:linear-gradient(135deg,var(--purple-50),var(--green-50));padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--green-200)}
+        .chat-status-dot{width:9px;height:9px;border-radius:50%;background:var(--green-500);box-shadow:0 0 0 3px rgba(67,165,92,0.2);animation:statusBlink 2s ease-in-out infinite;flex-shrink:0}
+        @keyframes statusBlink{0%,100%{box-shadow:0 0 0 3px rgba(67,165,92,0.2)}50%{box-shadow:0 0 0 8px rgba(67,165,92,0.07)}}
+        .chat-card-title{font-size:0.85rem;font-weight:600;color:var(--gray-800)}
+        .chat-card-badge{margin-left:auto;font-size:0.7rem;padding:3px 12px;border-radius:50px;background:var(--purple-50);color:var(--purple-500);font-weight:600}
+        .btn-new-chat{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border:1px solid var(--green-300);background:var(--white);color:var(--green-700);border-radius:50px;cursor:pointer;font-size:0.75rem;font-weight:500;font-family:inherit;transition:all 0.2s ease}
+        .btn-new-chat:hover{background:var(--green-50);border-color:var(--green-400)}
+        .chat-iframe-wrapper{position:relative;width:100%;height:600px;background:var(--gray-50)}
+        .chat-iframe-wrapper iframe{width:100%;height:100%;border:none;display:block}
+        .chat-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--gray-50);z-index:2;transition:opacity 0.4s ease}
+        .chat-loading.hidden{opacity:0;pointer-events:none}
+        .loading-spinner{width:32px;height:32px;border:3px solid var(--green-200);border-top-color:var(--purple-400);border-radius:50%;animation:spin 0.8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .info-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+        .info-card{background:var(--white);border-radius:var(--radius-sm);padding:18px 14px;border:2px solid var(--green-100);text-align:center;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
+        .info-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+        .info-card:nth-child(1){border-color:var(--green-400);background:linear-gradient(180deg,#f1f8f4,#fff)}
+        .info-card:nth-child(2){border-color:var(--blue-400);background:linear-gradient(180deg,#eaf2f8,#fff)}
+        .info-card:nth-child(3){border-color:var(--purple-400);background:linear-gradient(180deg,#f5f0ff,#fff)}
+        .info-card:nth-child(4){border-color:var(--orange-400);background:linear-gradient(180deg,#fef5e7,#fff)}
+        .info-card .card-trait{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+        .info-card:nth-child(1) .card-trait{color:var(--green-600)}
+        .info-card:nth-child(2) .card-trait{color:var(--blue-500)}
+        .info-card:nth-child(3) .card-trait{color:var(--purple-500)}
+        .info-card:nth-child(4) .card-trait{color:var(--orange-500)}
+        .info-card .info-emoji{font-size:2.2rem;display:block;margin-bottom:6px}
+        .info-card .info-title{font-size:0.95rem;font-weight:700;color:var(--gray-800);margin-bottom:4px}
+        .info-card .info-desc{font-size:0.75rem;color:var(--gray-500);line-height:1.5}
+        .info-card .info-hypo{font-size:0.68rem;color:var(--purple-500);font-weight:600;margin-top:6px;padding-top:6px;border-top:1px dashed var(--green-100)}
+        .hypo-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .hypo-card{background:var(--white);border-radius:var(--radius-sm);padding:16px 20px;box-shadow:var(--shadow-sm)}
+        .hypo-card:nth-child(1){border-left:4px solid var(--green-400);background:linear-gradient(135deg,#f1f8f4,#fff)}
+        .hypo-card:nth-child(2){border-left:4px solid var(--purple-400);background:linear-gradient(135deg,#f5f0ff,#fff)}
+        .hypo-card h4{font-size:0.88rem;font-weight:700;margin-bottom:8px}
+        .hypo-card:nth-child(1) h4{color:var(--green-600)}
+        .hypo-card:nth-child(2) h4{color:var(--purple-500)}
+        .hypo-card p{font-size:0.8rem;color:var(--gray-700);line-height:1.7}
+        .match-rule{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.7rem;font-weight:700;margin-top:6px;margin-right:4px}
+        .hypo-card:nth-child(1) .match-rule{background:var(--green-100);color:var(--green-700)}
+        .hypo-card:nth-child(2) .match-rule{background:var(--purple-50);color:var(--purple-500)}
+        .ref-card{background:var(--white);border-radius:var(--radius-sm);padding:14px 20px;border:1px solid var(--gray-200);box-shadow:var(--shadow-sm);font-size:0.78rem;color:var(--gray-600);text-align:center}
+        .footer{text-align:center;padding:16px 20px 28px;font-size:0.75rem;color:var(--gray-500)}
+        @media(max-width:768px){.page{padding:8px}.container{gap:14px}.header h1{font-size:1.3rem}.info-cards{grid-template-columns:1fr 1fr}.hypo-cards{grid-template-columns:1fr}.tab-btn{padding:8px 10px}.chat-iframe-wrapper{height:480px}}
+    </style>
+</head>
+<body>
+<div class="leaves"><span class="leaf">🍃</span><span class="leaf">🌿</span><span class="leaf">🍀</span><span class="leaf">🌱</span></div>
+<div class="page"><div class="container">
+
+<header class="header">
+    <div class="header-icon">🤝</div>
+    <h1>AI智能体人格感知实验平台</h1>
+    <p class="subtitle">4种独立单一特质AI智能体 · 分别操控宜人性或尽责性<br>
+    基于 Ju & Aral (2026) 实验范式 | H3a 宜人性相似匹配 + H3b 尽责性互补匹配</p>
+</header>
+
+<div class="flow-card">
+    <h3>📋 实验流程（人格后测——与后测问卷一并完成）</h3>
+    <div class="flow-steps">
+        <span class="flow-step">1. 知情同意</span><span class="flow-arrow">→</span>
+        <span class="flow-step">2. 随机分配<br>至4种AI之一</span><span class="flow-arrow">→</span>
+        <span class="flow-step">3. AI协作任务<br>文案创作 8-12分钟</span><span class="flow-arrow">→</span>
+        <span class="flow-step">4. 操纵检验<br>12题</span><span class="flow-arrow">→</span>
+        <span class="flow-step">5. 后测问卷<br>人格+SP+TC+CT+WC<br>(一次性完成)</span>
+    </div>
+</div>
+
+<nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="0"><span class="tab-emoji">💚</span><span class="tab-label">高宜人性</span></button>
+    <button class="tab-btn" data-tab="1"><span class="tab-emoji">💙</span><span class="tab-label">低宜人性</span></button>
+    <button class="tab-btn" data-tab="2"><span class="tab-emoji">💜</span><span class="tab-label">高尽责性</span></button>
+    <button class="tab-btn" data-tab="3"><span class="tab-emoji">🧡</span><span class="tab-label">低尽责性</span></button>
+</nav>
+
+<div class="chat-card">
+    <div class="chat-card-header">
+        <span class="chat-status-dot"></span>
+        <span class="chat-card-title" id="chatTitle">高宜人性 · 在线</span>
+        <button class="btn-new-chat" id="btnNewChat">🔄 新对话</button>
+        <span class="chat-card-badge">AI 文案助手</span>
+    </div>
+    <div class="chat-iframe-wrapper">
+        <div class="chat-loading" id="chatLoading">
+            <div class="loading-spinner"></div><span class="loading-text">正在连接智能助手…</span>
+        </div>
+        <iframe id="chatIframe" src="" allow="microphone" title="AI文案助手" loading="lazy" referrerpolicy="origin"></iframe>
+    </div>
+</div>
+
+<div class="info-cards">
+    <div class="info-card"><span class="card-trait">操控特质：宜人性</span><span class="info-emoji">💚</span><div class="info-title">高宜人性</div><div class="info-desc">温暖关怀 · 共情回应 · 礼貌友善<br>不批评 · 不争论 · 有人情味</div><div class="info-hypo">H3a 宜人性相似匹配</div></div>
+    <div class="info-card"><span class="card-trait">操控特质：宜人性</span><span class="info-emoji">💙</span><div class="info-title">低宜人性</div><div class="info-desc">冷淡疏离 · 不表达共情<br>直接挑错 · 公事公办 · 冷漠</div><div class="info-hypo">H3a 宜人性相似匹配</div></div>
+    <div class="info-card"><span class="card-trait">操控特质：尽责性</span><span class="info-emoji">💜</span><div class="info-title">高尽责性</div><div class="info-desc">条理清晰 · 结构化输出<br>方法论驱动 · 完整可靠 · 高效</div><div class="info-hypo">H3b 尽责性互补匹配</div></div>
+    <div class="info-card"><span class="card-trait">操控特质：尽责性</span><span class="info-emoji">🧡</span><div class="info-title">低尽责性</div><div class="info-desc">随性散漫 · 想到哪说哪<br>输出简略 · 不拘格式 · 随缘</div><div class="info-hypo">H3b 尽责性互补匹配</div></div>
+</div>
+
+<div class="hypo-cards">
+    <div class="hypo-card">
+        <h4>🔬 H3a · 宜人性相似匹配</h4>
+        <p>当用户的宜人性水平与AI的宜人性表现<strong>相似</strong>时（同为高或同为低），社会在场感的正面路径被增强，负面路径被减弱。宜人性是关系导向特质，遵循相似吸引法则——人们更愿与交往风格相似的对象协作。</p>
+        <span class="match-rule">高宜人用户 → 高宜人性AI</span><span class="match-rule">低宜人用户 → 低宜人性AI</span>
+    </div>
+    <div class="hypo-card">
+        <h4>🔬 H3b · 尽责性互补匹配</h4>
+        <p>当用户的尽责性水平与AI的尽责性表现<strong>互补</strong>时（高-低搭配或低-高搭配），社会在场感的正面路径被增强，负面路径被减弱。尽责性是任务导向特质，遵循互补匹配法则——分工互补比相同更有利于协作效率。</p>
+        <span class="match-rule">低尽责用户 → 高尽责性AI</span><span class="match-rule">高尽责用户 → 低尽责性AI</span>
+    </div>
+</div>
+
+<div class="ref-card">
+    📚 学术依据：Ju, H. & Aral, S. (2026). Personality Pairing Improves Human-AI Collaboration. arXiv:2511.13979v2 · Siemon, D. et al. (2026). JMS · 4种AI共享知识库，差异仅在于系统提示词中的人格设定 · 人格在交互后与后测问卷一并填写
+</div>
+
+<footer class="footer">© 2026 AI智能体人格感知实验平台 · 学术研究用途</footer>
+
+</div></div>
+
+<script>
+/* ========== 4种独立单一特质AI智能体 ========== */
+var agents = [
+    { name:'高宜人性', emoji:'💚', url:'https://udify.app/chat/wkyEImVl68NSHbke', trait:'agreeableness', level:'high' },
+    { name:'低宜人性', emoji:'💙', url:'https://udify.app/chat/gJcWzniJVeqBKtYY', trait:'agreeableness', level:'low' },
+    { name:'高尽责性', emoji:'💜', url:'https://udify.app/chat/O6gvg4xlkEp11YlQ', trait:'conscientiousness', level:'high' },
+    { name:'低尽责性', emoji:'🧡', url:'https://udify.app/chat/emhOlDowPUpN4Srt', trait:'conscientiousness', level:'low' },
+];
+
+var currentTab=0;
+var chatIframe=document.getElementById('chatIframe');
+var chatTitle=document.getElementById('chatTitle');
+var chatLoading=document.getElementById('chatLoading');
+function freshUrl(u){var s=u.includes('?')?'&':'?';return u+s+'_t='+Date.now()}
+function loadAgent(i){chatLoading.classList.remove('hidden');chatTitle.textContent=agents[i].name+' \xb7 在线';chatIframe.src=freshUrl(agents[i].url)}
+document.getElementById('tabNav').addEventListener('click',function(e){
+    var b=e.target.closest('.tab-btn');if(!b)return;var i=parseInt(b.getAttribute('data-tab'));
+    if(i===currentTab)return;document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
+    b.classList.add('active');currentTab=i;loadAgent(i)});
+document.getElementById('btnNewChat').addEventListener('click',function(){loadAgent(currentTab)});
+chatIframe.src=freshUrl(agents[0].url);
+chatIframe.addEventListener('load',function(){chatLoading.classList.add('hidden')});
+setTimeout(function(){chatLoading.classList.add('hidden')},8000);
+</script>
+</body>
+</html>
