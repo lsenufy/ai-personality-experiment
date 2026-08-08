@@ -7,90 +7,125 @@
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{
-            --green-50:#f1f8f4;--green-100:#dceee2;--green-200:#b7ddc2;--green-400:#5fb878;--green-500:#43a55c;--green-600:#338a48;--green-700:#2b6e3b;--green-800:#1e4829;
-            --purple-50:#f5f0ff;--purple-400:#9b59b6;--purple-500:#8e44ad;
-            --blue-50:#eaf2f8;--blue-400:#5dade2;--blue-500:#2980b9;
-            --orange-50:#fef5e7;--orange-400:#f0b27a;--orange-500:#e67e22;
-            --white:#fff;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
-            --gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;
-            --radius:18px;--radius-sm:12px;
-            --shadow-sm:0 1px 2px rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.07);
-            --shadow-lg:0 10px 25px -5px rgba(0,0,0,0.08);--shadow-xl:0 20px 40px -10px rgba(0,0,0,0.1);
+            --primary:#4D6BFE;--primary-hover:#3b5ae0;--primary-light:#eef1ff;--primary-50:#f5f7ff;
+            --blue-400:#7b93fa;--blue-500:#4D6BFE;--blue-600:#3b5ae0;
+            --white:#fff;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-150:#ebedf0;--gray-200:#e5e7eb;
+            --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+            --radius:16px;--radius-sm:12px;--radius-xs:8px;
+            --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md:0 4px 12px rgba(0,0,0,0.05);
+            --shadow-lg:0 8px 24px rgba(0,0,0,0.06);
+            --transition:0.25s cubic-bezier(0.4,0,0.2,1);
         }
         html{font-size:16px;scroll-behavior:smooth}
         body{
             font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
-            background:linear-gradient(170deg,#f5faf7 0%,#f0f2f5 30%,#faf8fc 60%,#fafdfb 100%);
-            background-attachment:fixed;color:var(--gray-800);min-height:100vh;line-height:1.6;
+            background:var(--gray-50);color:var(--gray-800);min-height:100vh;line-height:1.6;
             -webkit-font-smoothing:antialiased;
         }
+        .page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:40px 20px}
+        .container{width:100%;max-width:820px;display:flex;flex-direction:column;gap:28px}
+
+        /* ── Floating Leaves ── */
         .leaves{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-        .leaf{position:absolute;opacity:0.04;animation:floatLeaf 20s infinite ease-in-out}
-        .leaf:nth-child(1){top:8%;left:4%;font-size:2.6rem}
-        .leaf:nth-child(2){top:22%;left:88%;font-size:3rem;animation-delay:-5s}
-        .leaf:nth-child(3){top:58%;left:8%;font-size:2rem;animation-delay:-10s}
-        .leaf:nth-child(4){top:78%;left:78%;font-size:2.8rem;animation-delay:-15s}
-        @keyframes floatLeaf{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-18px) rotate(5deg) scale(1.05)}}
-        .page{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:20px}
-        .container{width:100%;max-width:940px;display:flex;flex-direction:column;gap:22px}
-        .header{text-align:center;padding:24px 16px 4px}
-        .header-icon{display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;font-size:1.8rem;margin-bottom:12px;background:linear-gradient(135deg,var(--purple-400),var(--green-400));border-radius:18px;box-shadow:0 8px 24px rgba(142,68,173,0.22);animation:iconPulse 3s ease-in-out infinite}
-        @keyframes iconPulse{0%,100%{box-shadow:0 8px 24px rgba(142,68,173,0.22)}50%{box-shadow:0 8px 38px rgba(142,68,173,0.38)}}
-        .header h1{font-size:1.8rem;font-weight:700;background:linear-gradient(135deg,var(--purple-500),var(--green-500));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-        .header .subtitle{font-size:0.9rem;color:var(--gray-600);max-width:520px;margin:0 auto;line-height:1.7}
-        .tab-nav{display:flex;gap:6px;padding:6px;background:var(--white);border-radius:var(--radius-sm);box-shadow:var(--shadow-md);border:1px solid var(--green-100);overflow-x:auto}
-        .tab-btn{flex:1;min-width:90px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;position:relative;border:none;background:transparent;border-radius:10px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--gray-500);white-space:nowrap;transition:all 0.25s ease;font-family:inherit}
-        .tab-btn:hover{color:var(--purple-500);background:var(--purple-50)}
-        .tab-btn.active{color:var(--purple-500);background:var(--purple-50);font-weight:700}
-        .tab-btn .tab-emoji{font-size:1.3rem}
+        .leaf{position:absolute;opacity:0.05;animation:floatLeaf 24s infinite ease-in-out}
+        .leaf:nth-child(1){top:5%;left:3%;font-size:3rem}
+        .leaf:nth-child(2){top:15%;left:92%;font-size:3.5rem;animation-delay:-6s;animation-duration:26s}
+        .leaf:nth-child(3){top:50%;left:4%;font-size:2.2rem;animation-delay:-12s;animation-duration:22s}
+        .leaf:nth-child(4){top:75%;left:85%;font-size:3.2rem;animation-delay:-18s;animation-duration:28s}
+        .leaf:nth-child(5){top:35%;left:48%;font-size:2.6rem;animation-delay:-3s;animation-duration:30s}
+        @keyframes floatLeaf{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-24px) rotate(6deg) scale(1.06)}}
+
+        /* ── Header ── */
+        .header{text-align:center;padding:20px 16px 8px}
+        .header-icon{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;font-size:1.5rem;margin-bottom:16px;
+            background:linear-gradient(135deg,#4D6BFE,#7b93fa);border-radius:14px;
+            box-shadow:0 4px 16px rgba(77,107,254,0.25)}
+        .header h1{font-size:1.7rem;font-weight:700;color:var(--gray-900);margin-bottom:10px;letter-spacing:-0.02em}
+        .header .subtitle{font-size:0.9rem;color:var(--gray-500);max-width:480px;margin:0 auto;line-height:1.7}
+
+        /* ── Tab Navigation ── */
+        .tab-nav{display:flex;gap:0;padding:4px;background:var(--gray-100);border-radius:var(--radius-xs);overflow-x:auto}
+        .tab-btn{flex:1;min-width:100px;display:flex;align-items:center;justify-content:center;gap:6px;
+            padding:11px 18px;position:relative;border:none;background:transparent;border-radius:6px;
+            cursor:pointer;font-size:0.88rem;font-weight:500;color:var(--gray-500);white-space:nowrap;
+            transition:all var(--transition);font-family:inherit}
+        .tab-btn:hover{color:var(--gray-700)}
+        .tab-btn.active{color:var(--primary);background:var(--white);font-weight:600;
+            box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+        .tab-btn .tab-emoji{font-size:1.25rem}
         .tab-btn .tab-label{font-size:0.85rem}
-        .tab-btn.active::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:20px;height:3px;background:var(--purple-400);border-radius:3px}
-        .chat-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-xl);overflow:hidden;border:1px solid var(--green-100)}
-        .chat-card-header{background:linear-gradient(135deg,var(--purple-50),var(--green-50));padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--green-200)}
-        .chat-status-dot{width:9px;height:9px;border-radius:50%;background:var(--green-500);box-shadow:0 0 0 3px rgba(67,165,92,0.2);animation:statusBlink 2s ease-in-out infinite;flex-shrink:0}
-        @keyframes statusBlink{0%,100%{box-shadow:0 0 0 3px rgba(67,165,92,0.2)}50%{box-shadow:0 0 0 8px rgba(67,165,92,0.07)}}
-        .chat-card-title{font-size:0.85rem;font-weight:600;color:var(--gray-800)}
-        .chat-card-badge{margin-left:auto;font-size:0.7rem;padding:3px 12px;border-radius:50px;background:var(--purple-50);color:var(--purple-500);font-weight:600}
-        .btn-new-chat{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border:1px solid var(--green-300);background:var(--white);color:var(--green-700);border-radius:50px;cursor:pointer;font-size:0.75rem;font-weight:500;font-family:inherit;transition:all 0.2s ease}
-        .btn-new-chat:hover{background:var(--green-50);border-color:var(--green-400)}
+
+        /* ── Chat Card ── */
+        .chat-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-lg);
+            overflow:hidden;border:1px solid var(--gray-150)}
+        .chat-card-header{background:var(--white);
+            padding:14px 22px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--gray-100)}
+        .chat-status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;
+            box-shadow:0 0 0 3px rgba(34,197,94,0.12);flex-shrink:0}
+        .chat-card-title{font-size:0.85rem;font-weight:600;color:var(--gray-700)}
+        .chat-card-badge{margin-left:auto;font-size:0.7rem;padding:4px 14px;border-radius:50px;
+            background:var(--primary-50);color:var(--primary);font-weight:600}
+        .btn-new-chat{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+            border:1px solid var(--gray-200);background:var(--white);color:var(--gray-600);border-radius:50px;
+            cursor:pointer;font-size:0.75rem;font-weight:500;font-family:inherit;
+            transition:all var(--transition)}
+        .btn-new-chat:hover{background:var(--gray-50);border-color:var(--gray-300);color:var(--gray-800)}
         .chat-iframe-wrapper{position:relative;width:100%;height:600px;background:var(--gray-50)}
         .chat-iframe-wrapper iframe{width:100%;height:100%;border:none;display:block}
-        .chat-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--gray-50);z-index:2;transition:opacity 0.4s ease}
+        .chat-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+            justify-content:center;gap:14px;background:var(--gray-50);z-index:2;transition:opacity 0.4s ease}
         .chat-loading.hidden{opacity:0;pointer-events:none}
-        .loading-spinner{width:32px;height:32px;border:3px solid var(--green-200);border-top-color:var(--purple-400);border-radius:50%;animation:spin 0.8s linear infinite}
+        .loading-spinner{width:32px;height:32px;border:3px solid var(--gray-200);
+            border-top-color:var(--primary);border-radius:50%;animation:spin 0.7s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
-        .info-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-        .info-card{background:var(--white);border-radius:var(--radius-sm);padding:18px 14px;border:2px solid var(--green-100);text-align:center;box-shadow:var(--shadow-sm);transition:all 0.25s ease}
-        .info-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-        .info-card:nth-child(1){border-color:var(--green-400);background:linear-gradient(180deg,#f1f8f4,#fff)}
-        .info-card:nth-child(2){border-color:var(--blue-400);background:linear-gradient(180deg,#eaf2f8,#fff)}
-        .info-card:nth-child(3){border-color:var(--purple-400);background:linear-gradient(180deg,#f5f0ff,#fff)}
-        .info-card:nth-child(4){border-color:var(--orange-400);background:linear-gradient(180deg,#fef5e7,#fff)}
-        .info-card .info-emoji{font-size:2.2rem;display:block;margin-bottom:6px}
-        .info-card .info-title{font-size:0.95rem;font-weight:700;color:var(--gray-800);margin-bottom:4px}
-        .info-card .info-desc{font-size:0.75rem;color:var(--gray-500);line-height:1.5}
-        .redirect-area{text-align:center;padding:8px 0}
-.redirect-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:linear-gradient(135deg,var(--purple-400),var(--green-400));color:#fff;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 6px 20px rgba(142,68,173,0.3);transition:all 0.25s ease;letter-spacing:0.03em}
-.redirect-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(142,68,173,0.4)}
-.redirect-tip{font-size:0.78rem;color:var(--gray-500);margin-bottom:10px}.footer{text-align:center;padding:16px 20px 28px;font-size:0.75rem;color:var(--gray-500)}
-        @media(max-width:768px){.page{padding:8px}.container{gap:14px}.header h1{font-size:1.3rem}.info-cards{grid-template-columns:1fr 1fr}.tab-btn{padding:8px 10px}.chat-iframe-wrapper{height:480px}}
+        .loading-text{font-size:0.85rem;color:var(--gray-400)}
+
+        /* ── Info Cards ── */
+        .info-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+        .info-card{background:var(--white);border-radius:var(--radius-sm);padding:28px 16px;
+            border:1px solid var(--gray-150);text-align:center;
+            transition:all var(--transition);cursor:pointer}
+        .info-card:hover{border-color:var(--blue-400);box-shadow:0 4px 16px rgba(77,107,254,0.08)}
+        .info-card.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(77,107,254,0.1)}
+        .info-card .info-emoji{font-size:2.5rem;display:block;margin-bottom:10px;transition:transform var(--transition)}
+        .info-card:hover .info-emoji{transform:scale(1.08)}
+        .info-card .info-title{font-size:0.92rem;font-weight:600;color:var(--gray-700)}
+
+        /* ── Redirect ── */
+        .redirect-area{text-align:center;padding:12px 0}
+        .redirect-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;
+            background:var(--primary);color:#fff;
+            border:none;border-radius:50px;font-size:0.95rem;font-weight:600;cursor:pointer;font-family:inherit;
+            box-shadow:0 4px 16px rgba(77,107,254,0.25);transition:all var(--transition);letter-spacing:0.01em}
+        .redirect-btn:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 8px 24px rgba(77,107,254,0.32)}
+        .redirect-btn:active{transform:translateY(0)}
+        .redirect-tip{font-size:0.8rem;color:var(--gray-400);margin-bottom:12px}
+
+        /* ── Footer ── */
+        .footer{text-align:center;padding:8px 20px 32px;font-size:0.78rem;color:var(--gray-400)}
+
+        /* ── Responsive ── */
+        @media(max-width:768px){
+            .page{padding:16px 8px}.container{gap:18px}.header h1{font-size:1.3rem}
+            .info-cards{grid-template-columns:1fr 1fr}.tab-btn{padding:9px 10px}.chat-iframe-wrapper{height:480px}
+        }
     </style>
 </head>
 <body>
-<div class="leaves"><span class="leaf">🍃</span><span class="leaf">🌿</span><span class="leaf">🍀</span><span class="leaf">🌱</span></div>
+<div class="leaves"><span class="leaf">🍃</span><span class="leaf">🌿</span><span class="leaf">🍀</span><span class="leaf">🌱</span><span class="leaf">🍂</span></div>
 <div class="page"><div class="container">
 
 <header class="header">
-    <div class="header-icon">🤝</div>
+    <div class="header-icon">🍃</div>
     <h1>AI 文案助手</h1>
     <p class="subtitle">请从下方选择一位AI助手，开始文案创作协作</p>
 </header>
 
 <nav class="tab-nav" id="tabNav">
     <button class="tab-btn active" data-tab="0"><span class="tab-emoji">💚</span><span class="tab-label">高宜人性</span></button>
-    <button class="tab-btn" data-tab="1"><span class="tab-emoji">💙</span><span class="tab-label">低宜人性</span></button>
-    <button class="tab-btn" data-tab="2"><span class="tab-emoji">💜</span><span class="tab-label">高尽责性</span></button>
-    <button class="tab-btn" data-tab="3"><span class="tab-emoji">🧡</span><span class="tab-label">低尽责性</span></button>
+    <button class="tab-btn" data-tab="1"><span class="tab-emoji">💛</span><span class="tab-label">中宜人性</span></button>
+    <button class="tab-btn" data-tab="2"><span class="tab-emoji">💙</span><span class="tab-label">低宜人性</span></button>
 </nav>
 
 <div class="chat-card">
@@ -109,15 +144,14 @@
 </div>
 
 <div class="info-cards">
-    <div class="info-card"><span class="info-emoji">💚</span><div class="info-title">高宜人性</div><div class="info-desc">温暖关怀 · 共情回应 · 礼貌友善</div></div>
-    <div class="info-card"><span class="info-emoji">💙</span><div class="info-title">低宜人性</div><div class="info-desc">直言不讳 · 效率优先 · 公事公办</div></div>
-    <div class="info-card"><span class="info-emoji">💜</span><div class="info-title">高尽责性</div><div class="info-desc">条理清晰 · 结构化输出 · 可靠高效</div></div>
-    <div class="info-card"><span class="info-emoji">🧡</span><div class="info-title">低尽责性</div><div class="info-desc">随性自由 · 不拘格式 · 灵活应变</div></div>
+    <div class="info-card selected" data-tab="0"><span class="info-emoji">💚</span><div class="info-title">高宜人性</div></div>
+    <div class="info-card" data-tab="1"><span class="info-emoji">💛</span><div class="info-title">中宜人性</div></div>
+    <div class="info-card" data-tab="2"><span class="info-emoji">💙</span><div class="info-title">低宜人性</div></div>
 </div>
 
 <div class="redirect-area">
     <p class="redirect-tip">完成与AI助手的协作后，请点击下方按钮进入下一步</p>
-    <button class="redirect-btn" onclick="location.href='https://www.credamo.com/s/u67VJ3/'">📝 完成协作，前往问卷</button>
+    <button class="redirect-btn" onclick="location.href='https://www.credamo.com/s/NzM3Aj/'">📝 完成协作，前往问卷</button>
 </div>
 
 <footer class="footer">© 2026 AI 文案助手</footer>
@@ -125,12 +159,11 @@
 </div></div>
 
 <script>
-/* ========== 4种AI智能体 ========== */
+/* ========== 3种AI智能体 ========== */
 var agents = [
     { name:'高宜人性', emoji:'💚', url:'https://udify.app/chat/wkyEImVl68NSHbke' },
+    { name:'中宜人性', emoji:'💛', url:'https://udify.app/chat/YRNxn9UdrYjThAC9' },
     { name:'低宜人性', emoji:'💙', url:'https://udify.app/chat/gJcWzniJVeqBKtYY' },
-    { name:'高尽责性', emoji:'💜', url:'https://udify.app/chat/O6gvg4xlkEp11YlQ' },
-    { name:'低尽责性', emoji:'🧡', url:'https://udify.app/chat/emhOlDowPUpN4Srt' },
 ];
 
 var currentTab=0;
@@ -139,10 +172,22 @@ var chatTitle=document.getElementById('chatTitle');
 var chatLoading=document.getElementById('chatLoading');
 function freshUrl(u){var s=u.includes('?')?'&':'?';return u+s+'_t='+Date.now()}
 function loadAgent(i){chatLoading.classList.remove('hidden');chatTitle.textContent=agents[i].name+' \xb7 在线';chatIframe.src=freshUrl(agents[i].url)}
+function switchTab(i){
+    if(i===currentTab)return;
+    document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
+    document.querySelectorAll('.info-card').forEach(function(x){x.classList.remove('selected')});
+    document.querySelector('.tab-btn[data-tab="'+i+'"]').classList.add('active');
+    document.querySelector('.info-card[data-tab="'+i+'"]').classList.add('selected');
+    currentTab=i;loadAgent(i);
+}
 document.getElementById('tabNav').addEventListener('click',function(e){
     var b=e.target.closest('.tab-btn');if(!b)return;var i=parseInt(b.getAttribute('data-tab'));
-    if(i===currentTab)return;document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
-    b.classList.add('active');currentTab=i;loadAgent(i)});
+    switchTab(i);
+});
+document.querySelector('.info-cards').addEventListener('click',function(e){
+    var c=e.target.closest('.info-card');if(!c)return;var i=parseInt(c.getAttribute('data-tab'));
+    switchTab(i);
+});
 document.getElementById('btnNewChat').addEventListener('click',function(){loadAgent(currentTab)});
 chatIframe.src=freshUrl(agents[0].url);
 chatIframe.addEventListener('load',function(){chatLoading.classList.add('hidden')});
