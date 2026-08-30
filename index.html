@@ -53,8 +53,31 @@
         .tab-btn:hover{color:var(--gray-700)}
         .tab-btn.active{color:var(--primary);background:var(--white);font-weight:600;
             box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+        .tab-btn:disabled{cursor:default}
+        .tab-btn:not(.active):disabled{color:var(--gray-400)}
         .tab-btn .tab-emoji{font-size:1.25rem}
         .tab-btn .tab-label{font-size:0.85rem}
+
+        /* ── Random Assignment ── */
+        .allocation-panel{background:var(--white);border:1px solid var(--gray-150);border-radius:var(--radius);
+            padding:26px;text-align:center;box-shadow:var(--shadow-md)}
+        .allocation-title{font-size:1.05rem;font-weight:700;color:var(--gray-800);margin-bottom:8px}
+        .allocation-tip{font-size:0.88rem;color:var(--gray-500);margin-bottom:18px;line-height:1.7}
+        .allocation-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 34px;
+            border:none;border-radius:50px;background:var(--primary);color:var(--white);font-family:inherit;
+            font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(77,107,254,0.25);
+            transition:all var(--transition)}
+        .allocation-btn:hover{background:var(--primary-hover);transform:translateY(-1px)}
+        .allocation-btn:disabled{cursor:default;opacity:.65;transform:none}
+        .allocation-result{margin-top:18px;padding:16px 18px;border-radius:var(--radius-sm);
+            background:var(--primary-light);border:1px solid #dbe2ff;color:var(--gray-700)}
+        .allocation-result strong{display:block;color:var(--primary);font-size:1.05rem;margin-bottom:4px}
+        .allocation-result span{font-size:0.84rem;color:var(--gray-500)}
+        .is-hidden{display:none!important}
+
+        .task-notice{background:var(--white);border:1px solid var(--gray-150);border-radius:var(--radius-sm);
+            padding:18px 22px;color:var(--gray-600);font-size:0.88rem;line-height:1.75}
+        .task-notice strong{color:var(--gray-800)}
 
         /* ── Chat Card ── */
         .chat-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-lg);
@@ -100,6 +123,7 @@
             box-shadow:0 4px 16px rgba(77,107,254,0.25);transition:all var(--transition);letter-spacing:0.01em}
         .redirect-btn:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 8px 24px rgba(77,107,254,0.32)}
         .redirect-btn:active{transform:translateY(0)}
+        .redirect-btn:disabled{background:var(--gray-300);box-shadow:none;cursor:not-allowed;transform:none}
         .redirect-tip{font-size:0.8rem;color:var(--gray-400);margin-bottom:12px}
 
         /* ── Footer ── */
@@ -119,19 +143,26 @@
 <header class="header">
     <div class="header-icon">🍃</div>
     <h1>AI 文案助手</h1>
-    <p class="subtitle">请从下方选择一位AI助手，开始文案创作协作</p>
+    <p class="subtitle">系统将随机分配一位AI助手，与您共同完成营销文案任务</p>
 </header>
 
-<nav class="tab-nav" id="tabNav">
-    <button class="tab-btn active" data-tab="0"><span class="tab-emoji">💚</span><span class="tab-label">高宜人性</span></button>
-    <button class="tab-btn" data-tab="1"><span class="tab-emoji">💛</span><span class="tab-label">中宜人性</span></button>
-    <button class="tab-btn" data-tab="2"><span class="tab-emoji">💙</span><span class="tab-label">低宜人性</span></button>
+<section class="allocation-panel" id="allocationPanel" aria-labelledby="allocationTitle">
+    <h2 class="allocation-title" id="allocationTitle">随机分配实验智能体</h2>
+    <p class="allocation-tip">点击下方按钮后，系统会以相同概率从左侧、中间、右侧三位智能体中随机抽取一位。<br>分配完成后不能手动更换智能体。</p>
+    <button class="allocation-btn" id="allocationButton" type="button">🎲 点击随机分配智能体</button>
+    <div class="allocation-result is-hidden" id="allocationResult" role="status" aria-live="polite"></div>
+</section>
+
+<nav class="tab-nav" id="positionNav" aria-label="智能体随机分配结果">
+    <button class="tab-btn" data-tab="0" type="button" disabled><span class="tab-emoji">⬅️</span><span class="tab-label">左侧智能体</span></button>
+    <button class="tab-btn" data-tab="1" type="button" disabled><span class="tab-emoji">⏺️</span><span class="tab-label">中间智能体</span></button>
+    <button class="tab-btn" data-tab="2" type="button" disabled><span class="tab-emoji">➡️</span><span class="tab-label">右侧智能体</span></button>
 </nav>
 
-<div class="chat-card">
+<div class="chat-card is-hidden" id="chatCard">
     <div class="chat-card-header">
         <span class="chat-status-dot"></span>
-        <span class="chat-card-title" id="chatTitle">高宜人性 · 在线</span>
+        <span class="chat-card-title" id="chatTitle">等待随机分配</span>
         <button class="btn-new-chat" id="btnNewChat">🔄 新对话</button>
         <span class="chat-card-badge">AI 文案助手</span>
     </div>
@@ -143,15 +174,13 @@
     </div>
 </div>
 
-<div class="info-cards">
-    <div class="info-card selected" data-tab="0"><span class="info-emoji">💚</span><div class="info-title">高宜人性</div></div>
-    <div class="info-card" data-tab="1"><span class="info-emoji">💛</span><div class="info-title">中宜人性</div></div>
-    <div class="info-card" data-tab="2"><span class="info-emoji">💙</span><div class="info-title">低宜人性</div></div>
+<div class="task-notice is-hidden" id="taskNotice">
+    <strong>营销文案协作任务：</strong>请按照问卷首页的任务说明，与上方随机分配的AI智能体共同完成营销文案。完成协作后，再点击页面最下方按钮进入问卷。
 </div>
 
 <div class="redirect-area">
-    <p class="redirect-tip">完成与AI助手的协作后，请点击下方按钮进入下一步</p>
-    <button class="redirect-btn" onclick="location.href='https://www.credamo.com/s/NzM3Aj/'">📝 完成协作，前往问卷</button>
+    <p class="redirect-tip" id="surveyTip">请先完成随机分配并与AI助手协作</p>
+    <button class="redirect-btn" id="surveyButton" type="button" disabled>📝 完成协作，前往问卷</button>
 </div>
 
 <footer class="footer">© 2026 AI 文案助手</footer>
@@ -159,39 +188,84 @@
 </div></div>
 
 <script>
-/* ========== 3种AI智能体 ========== */
+/* ========== 3种AI智能体：左/中/右分别对应高/中/低宜人性 ========== */
 var agents = [
-    { name:'高宜人性', emoji:'💚', url:'https://udify.app/chat/wkyEImVl68NSHbke' },
-    { name:'中宜人性', emoji:'💛', url:'https://udify.app/chat/YRNxn9UdrYjThAC9' },
-    { name:'低宜人性', emoji:'💙', url:'https://udify.app/chat/gJcWzniJVeqBKtYY' },
+    { name:'高宜人性', position:'左侧', emoji:'💚', url:'https://udify.app/chat/wkyEImVl68NSHbke' },
+    { name:'中宜人性', position:'中间', emoji:'💛', url:'https://udify.app/chat/YRNxn9UdrYjThAC9' },
+    { name:'低宜人性', position:'右侧', emoji:'💙', url:'https://udify.app/chat/gJcWzniJVeqBKtYY' },
 ];
 
-var currentTab=0;
+var ASSIGNMENT_KEY='aiPersonalityAssignment_v1';
+var SURVEY_URL='https://www.credamo.com/s/NzM3Aj/';
+var currentTab=null;
 var chatIframe=document.getElementById('chatIframe');
 var chatTitle=document.getElementById('chatTitle');
 var chatLoading=document.getElementById('chatLoading');
+var chatCard=document.getElementById('chatCard');
+var taskNotice=document.getElementById('taskNotice');
+var allocationButton=document.getElementById('allocationButton');
+var allocationResult=document.getElementById('allocationResult');
+var surveyButton=document.getElementById('surveyButton');
+var surveyTip=document.getElementById('surveyTip');
 function freshUrl(u){var s=u.includes('?')?'&':'?';return u+s+'_t='+Date.now()}
-function loadAgent(i){chatLoading.classList.remove('hidden');chatTitle.textContent=agents[i].name+' \xb7 在线';chatIframe.src=freshUrl(agents[i].url)}
-function switchTab(i){
-    if(i===currentTab)return;
-    document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
-    document.querySelectorAll('.info-card').forEach(function(x){x.classList.remove('selected')});
-    document.querySelector('.tab-btn[data-tab="'+i+'"]').classList.add('active');
-    document.querySelector('.info-card[data-tab="'+i+'"]').classList.add('selected');
-    currentTab=i;loadAgent(i);
+function secureRandomIndex(max){
+    if(window.crypto&&window.crypto.getRandomValues){
+        var values=new Uint32Array(1);
+        var limit=Math.floor(0x100000000/max)*max;
+        do{window.crypto.getRandomValues(values)}while(values[0]>=limit);
+        return values[0]%max;
+    }
+    return Math.floor(Math.random()*max);
 }
-document.getElementById('tabNav').addEventListener('click',function(e){
-    var b=e.target.closest('.tab-btn');if(!b)return;var i=parseInt(b.getAttribute('data-tab'));
-    switchTab(i);
+function saveAssignment(i){
+    try{localStorage.setItem(ASSIGNMENT_KEY,String(i))}catch(e){}
+}
+function readAssignment(){
+    try{
+        var saved=localStorage.getItem(ASSIGNMENT_KEY);
+        if(saved==='0'||saved==='1'||saved==='2')return parseInt(saved,10);
+    }catch(e){}
+    return null;
+}
+function loadAgent(i){
+    chatLoading.classList.remove('hidden');
+    chatTitle.textContent=agents[i].position+'智能体（'+agents[i].name+'） · 在线';
+    chatIframe.src=freshUrl(agents[i].url);
+}
+function showAssignment(i,isRestored){
+    var agent=agents[i];
+    document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
+    document.querySelector('.tab-btn[data-tab="'+i+'"]').classList.add('active');
+    document.querySelector('.tab-btn[data-tab="'+i+'"] .tab-label').textContent=agent.position+' · '+agent.name;
+    currentTab=i;
+    allocationButton.disabled=true;
+    allocationButton.textContent=isRestored?'✅ 已恢复随机分配结果':'✅ 随机分配已完成';
+    allocationResult.innerHTML='<strong>'+agent.emoji+' 您被随机分配到'+agent.position+'智能体（'+agent.name+'）</strong>'+
+        '<span>请记住：问卷中应选择“'+agent.position+'智能体”。本次实验期间不能更换为其他智能体。</span>';
+    allocationResult.classList.remove('is-hidden');
+    chatCard.classList.remove('is-hidden');
+    taskNotice.classList.remove('is-hidden');
+    surveyButton.disabled=false;
+    surveyTip.textContent='完成协作后进入问卷；您的分组是：'+agent.position+'智能体（'+agent.name+'）';
+    loadAgent(i);
+}
+allocationButton.addEventListener('click',function(){
+    if(currentTab!==null)return;
+    var assigned=secureRandomIndex(agents.length);
+    saveAssignment(assigned);
+    showAssignment(assigned,false);
 });
-document.querySelector('.info-cards').addEventListener('click',function(e){
-    var c=e.target.closest('.info-card');if(!c)return;var i=parseInt(c.getAttribute('data-tab'));
-    switchTab(i);
+document.getElementById('btnNewChat').addEventListener('click',function(){
+    if(currentTab!==null)loadAgent(currentTab);
 });
-document.getElementById('btnNewChat').addEventListener('click',function(){loadAgent(currentTab)});
-chatIframe.src=freshUrl(agents[0].url);
+surveyButton.addEventListener('click',function(){
+    if(currentTab===null)return;
+    location.href=SURVEY_URL;
+});
 chatIframe.addEventListener('load',function(){chatLoading.classList.add('hidden')});
 setTimeout(function(){chatLoading.classList.add('hidden')},8000);
+var existingAssignment=readAssignment();
+if(existingAssignment!==null)showAssignment(existingAssignment,true);
 </script>
 </body>
 </html>
