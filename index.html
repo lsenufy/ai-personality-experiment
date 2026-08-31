@@ -188,14 +188,14 @@
 </div></div>
 
 <script>
-/* ========== 3种AI智能体：左/中/右分别对应高/中/低宜人性 ========== */
+/* ========== 实验智能体配置 ========== */
 var agents = [
-    { name:'高宜人性', position:'左侧', emoji:'💚', url:'https://udify.app/chat/wkyEImVl68NSHbke' },
-    { name:'中宜人性', position:'中间', emoji:'💛', url:'https://udify.app/chat/YRNxn9UdrYjThAC9' },
-    { name:'低宜人性', position:'右侧', emoji:'💙', url:'https://udify.app/chat/gJcWzniJVeqBKtYY' },
+    { position:'左侧', url:'https://udify.app/chat/wkyEImVl68NSHbke' },
+    { position:'中间', url:'https://udify.app/chat/YRNxn9UdrYjThAC9' },
+    { position:'右侧', url:'https://udify.app/chat/gJcWzniJVeqBKtYY' },
 ];
 
-var ASSIGNMENT_KEY='aiPersonalityAssignment_v1';
+var ASSIGNMENT_KEY='experimentAgentAssignment_v2';
 var SURVEY_URL='https://www.credamo.com/s/NzM3Aj/';
 var currentTab=null;
 var chatIframe=document.getElementById('chatIframe');
@@ -229,24 +229,24 @@ function readAssignment(){
 }
 function loadAgent(i){
     chatLoading.classList.remove('hidden');
-    chatTitle.textContent=agents[i].position+'智能体（'+agents[i].name+'） · 在线';
+    chatTitle.textContent=agents[i].position+'智能体 · 在线';
     chatIframe.src=freshUrl(agents[i].url);
 }
 function showAssignment(i,isRestored){
     var agent=agents[i];
     document.querySelectorAll('.tab-btn').forEach(function(x){x.classList.remove('active')});
     document.querySelector('.tab-btn[data-tab="'+i+'"]').classList.add('active');
-    document.querySelector('.tab-btn[data-tab="'+i+'"] .tab-label').textContent=agent.position+' · '+agent.name;
+    document.querySelector('.tab-btn[data-tab="'+i+'"] .tab-label').textContent=agent.position+'智能体';
     currentTab=i;
     allocationButton.disabled=true;
     allocationButton.textContent=isRestored?'✅ 已恢复随机分配结果':'✅ 随机分配已完成';
-    allocationResult.innerHTML='<strong>'+agent.emoji+' 您被随机分配到'+agent.position+'智能体（'+agent.name+'）</strong>'+
+    allocationResult.innerHTML='<strong>🤖 您被随机分配到'+agent.position+'智能体</strong>'+
         '<span>请记住：问卷中应选择“'+agent.position+'智能体”。本次实验期间不能更换为其他智能体。</span>';
     allocationResult.classList.remove('is-hidden');
     chatCard.classList.remove('is-hidden');
     taskNotice.classList.remove('is-hidden');
     surveyButton.disabled=false;
-    surveyTip.textContent='完成协作后进入问卷；您的分组是：'+agent.position+'智能体（'+agent.name+'）';
+    surveyTip.textContent='完成协作后进入问卷；请记住您使用的是'+agent.position+'智能体';
     loadAgent(i);
 }
 allocationButton.addEventListener('click',function(){
