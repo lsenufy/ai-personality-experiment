@@ -137,6 +137,4 @@ var SURVEY_URL = 'https://www.credamo.com/s/xxxxxx/'; // 问卷跳转地址
 
 ## 许可证
 
-本仓库尚未指定开源许可证。若无 `LICENSE` 文件，默认保留全部权利，他人无法合法复用。
-
-如需开放复用，建议补充一个 `LICENSE`：希望自由复用（含商用）选 **MIT** 或 **Apache-2.0**；仅限非商业学术用途选 **CC BY-NC 4.0**。
+MIT@lsenufy
