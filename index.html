@@ -125,6 +125,11 @@
         .redirect-btn:active{transform:translateY(0)}
         .redirect-btn:disabled{background:var(--gray-300);box-shadow:none;cursor:not-allowed;transform:none}
         .redirect-tip{font-size:0.8rem;color:var(--gray-400);margin-bottom:12px}
+        .redirect-note{max-width:560px;margin:18px auto 0;padding:12px 16px;border-radius:var(--radius-xs);
+            background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-600);
+            font-size:0.78rem;line-height:1.75;text-align:left}
+        .redirect-note strong{color:var(--gray-800);font-weight:600}
+        .redirect-note .note-title{display:block;margin-bottom:2px}
 
         /* ── Footer ── */
         .footer{text-align:center;padding:8px 20px 32px;font-size:0.78rem;color:var(--gray-400)}
@@ -181,6 +186,10 @@
 <div class="redirect-area">
     <p class="redirect-tip" id="surveyTip">请先完成随机分配并与AI助手协作</p>
     <button class="redirect-btn" id="surveyButton" type="button" disabled>📝 完成协作，前往问卷</button>
+    <div class="redirect-note">
+        <strong class="note-title">报酬说明</strong>
+        本链接为实验跳转专用入口，<strong>不发放问卷报酬</strong>。若您是通过见数（Credamo）平台受邀参与本次研究，请<strong>返回见数平台的原问卷</strong>完成作答并领取报酬；通过本链接提交的问卷将无法获得报酬。
+    </div>
 </div>
 
 <footer class="footer">© 2026 AI 文案助手</footer>
@@ -196,7 +205,7 @@ var agents = [
 ];
 
 var ASSIGNMENT_KEY='experimentAgentAssignment_v2';
-var SURVEY_URL='https://www.credamo.com/s/NzM3Aj/';
+var SURVEY_URL='https://www.credamo.com/s/zYz6Nj/';
 var currentTab=null;
 var chatIframe=document.getElementById('chatIframe');
 var chatTitle=document.getElementById('chatTitle');
