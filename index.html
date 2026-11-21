@@ -69,6 +69,7 @@
             padding:26px;text-align:center;box-shadow:var(--shadow-md)}
         .allocation-title{font-size:1.05rem;font-weight:700;color:var(--gray-800);margin-bottom:8px}
         .allocation-tip{font-size:0.88rem;color:var(--gray-500);margin-bottom:18px;line-height:1.7}
+        .allocation-identity{margin:0 auto 14px}
         .allocation-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 34px;
             border:none;border-radius:50px;background:var(--primary);color:var(--white);font-family:inherit;
             font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(77,107,254,0.25);
@@ -184,7 +185,8 @@
 <section class="allocation-panel" id="allocationPanel" aria-labelledby="allocationTitle">
     <h2 class="allocation-title" id="allocationTitle">连接合作者</h2>
     <p class="allocation-tip">阅读任务后点击开始，请在当前会话中完成任务。</p>
-    <button class="allocation-btn" id="allocationButton" type="button" disabled>开始协作</button>
+    <p class="partner-identity allocation-identity is-hidden" id="allocationIdentity"></p>
+    <button class="allocation-btn" id="allocationButton" type="button" aria-describedby="allocationIdentity" disabled>开始协作</button>
     <div class="allocation-result is-hidden" id="allocationResult" role="status" aria-live="polite"></div>
 </section>
 
@@ -248,7 +250,7 @@ const chatCard = document.getElementById('chatCard');
 const taskNotice = document.getElementById('taskNotice');
 const allocationButton = document.getElementById('allocationButton');
 const allocationResult = document.getElementById('allocationResult');
-const partnerIdentity = document.getElementById('partnerIdentity');
+const partnerIdentityNotes = document.querySelectorAll('.partner-identity');
 const completionCard = document.getElementById('completionCard');
 let loadingTimeout = null;
 
@@ -301,10 +303,13 @@ function setUpAssignment() {
     const condition = conditions.get(cell);
     const record = saved && saved.cell === cell ? saved : { cell, assignedAt: new Date().toISOString(), started: false };
     saveAssignment(storageKey, record);
-    partnerIdentity.textContent = condition.disclosed
+    const identityText = condition.disclosed
         ? '本次合作者是 AI 文案协作助手。'
         : '本次合作者是文案协作助手。';
-    partnerIdentity.classList.remove('is-hidden');
+    for (const note of partnerIdentityNotes) {
+        note.textContent = identityText;
+        note.classList.remove('is-hidden');
+    }
 
     function connect() {
         allocationButton.disabled = true;
